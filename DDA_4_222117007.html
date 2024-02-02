@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Coret-coret Dua Titik</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="512" height="512"></canvas>
+
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var clickCount = 0;
+    var coordinates = [];
+
+    canvas.addEventListener('click', function(e) {
+        clickCount++;
+        coordinates.push({ x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop });
+
+        if (clickCount === 2) {
+            draw();
+            clickCount = 0; // Reset click count after drawing the line
+        }
+    });
+
+    function draw() {
+        context.lineWidth = 5;
+        context.lineCap = 'round';
+        context.strokeStyle = '#000';
+
+        for (var i = 0; i < coordinates.length - 1; i++) {
+            context.beginPath();
+            context.moveTo(coordinates[i].x, coordinates[i].y);
+            context.lineTo(coordinates[i + 1].x, coordinates[i + 1].y);
+            context.stroke();
+        }
+    }
+</script>
+
+</body>
+</html>
