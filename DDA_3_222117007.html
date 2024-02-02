@@ -16,28 +16,35 @@
 <script>
     var canvas = document.getElementById('myCanvas');
     var context = canvas.getContext('2d');
+    var lines = []; // Array untuk menyimpan koordinat garis-garis
     var clickCount = 0;
-    var coordinates = [];
+    var startCoordinates = { x: 0, y: 0 };
+    var endCoordinates = { x: 0, y: 0 };
 
     canvas.addEventListener('click', function(e) {
         clickCount++;
-        coordinates.push({ x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop });
-
-        if (clickCount === 2) {
+        if (clickCount === 1) {
+            startCoordinates = { x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop };
+        } else if (clickCount === 2) {
+            endCoordinates = { x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop };
+            lines.push({ start: startCoordinates, end: endCoordinates });
             draw();
             clickCount = 0; // Reset click count after drawing the line
         }
     });
 
     function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
         context.lineWidth = 5;
         context.lineCap = 'round';
         context.strokeStyle = '#000';
 
-        for (var i = 0; i < coordinates.length - 1; i++) {
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i];
             context.beginPath();
-            context.moveTo(coordinates[i].x, coordinates[i].y);
-            context.lineTo(coordinates[i + 1].x, coordinates[i + 1].y);
+            context.moveTo(line.start.x, line.start.y);
+            context.lineTo(line.end.x, line.end.y);
             context.stroke();
         }
     }
