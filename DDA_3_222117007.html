@@ -29,7 +29,7 @@
             endCoordinates = { x: e.clientX - canvas.offsetLeft, y: e.clientY - canvas.offsetTop };
             lines.push({ start: startCoordinates, end: endCoordinates });
             draw();
-            clickCount = 0; // Reset click count after drawing the line
+            clickCount = 1; // Reset click count after drawing the line (but not to 0)
         }
     });
 
