@@ -1,2 +1,79 @@
-hello world
-222117007 (Billie Nathaniel Phalosa)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Coret-coret DDA</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+<canvas id="myCanvas" width="512" height="512"></canvas>
+
+<script>
+    var canvas = document.getElementById('myCanvas');
+    var context = canvas.getContext('2d');
+    var isDrawing = false;
+
+    canvas.addEventListener('mousedown', function(e) {
+        isDrawing = true;
+        draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, false);
+    });
+
+    canvas.addEventListener('mousemove', function(e) {
+        if (isDrawing) {
+            draw(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, true);
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        isDrawing = false;
+    });
+
+    canvas.addEventListener('mouseleave', function() {
+        isDrawing = false;
+    });
+
+    function draw(x, y, isDragging) {
+        if (!isDrawing) return;
+
+        context.lineWidth = 5;
+        context.lineCap = 'round';
+        context.strokeStyle = '#000';
+
+        if (isDragging) {
+            drawDDALine(prevX, prevY, x, y);
+        } else {
+            context.beginPath();
+            context.moveTo(x, y);
+        }
+
+        prevX = x;
+        prevY = y;
+    }
+
+    function drawDDALine(x1, y1, x2, y2) {
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var steps = Math.max(Math.abs(dx), Math.abs(dy));
+        var xIncrement = dx / steps;
+        var yIncrement = dy / steps;
+
+        var x = x1;
+        var y = y1;
+
+        for (var i = 0; i < steps; i++) {
+            context.lineTo(x, y);
+            x += xIncrement;
+            y += yIncrement;
+        }
+
+        context.stroke();
+    }
+</script>
+
+</body>
+</html>
